@@ -31,15 +31,28 @@ Recipe.create({
   dishType: 'Drink',
   duration: 20,
   creator: 'IronMinions'
-}).then(() => {
-  Recipe.insertMany(data)
-}).then(() => {
+})
+.then(recipe => {
+  console.log(recipe.title);
+  return Recipe.insertMany(data)
+})
+.then(recipes => {
+  recipes.forEach((recipe) => console.log(recipe.title));
   Recipe.updateOne({
+    title: 'Rigatoni alla Genovese',
     duration: 100
   })
-}).then(() => {
-  console.log('succesful updated recipe!');
-  //aqui haz lo siguiente del ejercicio
 })
+.then(() => {
+  console.log('succesfully updated recipe!');
+  Recipe.findByIdAndRemove({
+    title: 'Carrot Cake'
+  })
+})
+.then(() => {
+  console.log('Deleted Sucessfully!');
+  mongoose.connection.close();
+})
+.catch(err => console.log(err));
 
 module.exports = Recipe;
